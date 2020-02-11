@@ -35,23 +35,23 @@ namespace Test.FunctionalTest
 
         private const int ErrorTestingSlideNo = 34;
         private const int FirstSlideSlideNo = 1;
-        private const int LastSlideSlideNo = 51;
+        private const int LastSlideSlideNo = 52;
 
-        private const int CheckClipboardRestoredAfterDrillDownOriginalSlideNo = 31;
-        private const int CheckClipboardRestoredAfterDrillDownActionSlideNo = 32;
-        private const int CheckClipboardRestoredAfterDrillDownExpectedSlideNo = 34;
+        private const int CheckClipboardRestoredAfterDrillDownOriginalSlideNo = 32;
+        private const int CheckClipboardRestoredAfterDrillDownActionSlideNo = 33;
+        private const int CheckClipboardRestoredAfterDrillDownExpectedSlideNo = 35;
 
-        private const int CheckClipboardRestoredAfterDrillDownBackgroundOriginalSlideNo = 34;
-        private const int CheckClipboardRestoredAfterDrillDownBackgroundActionSlideNo = 35;
-        private const int CheckClipboardRestoredAfterDrillDownBackgroundExpectedSlideNo = 37;
+        private const int CheckClipboardRestoredAfterDrillDownBackgroundOriginalSlideNo = 35;
+        private const int CheckClipboardRestoredAfterDrillDownBackgroundActionSlideNo = 36;
+        private const int CheckClipboardRestoredAfterDrillDownBackgroundExpectedSlideNo = 38;
 
-        private const int CheckClipboardRestoredAfterStepBackOriginalSlideNo = 37;
-        private const int CheckClipboardRestoredAfterStepBackActionSlideNo = 38;
-        private const int CheckClipboardRestoredAfterStepBackExpectedSlideNo = 40;
+        private const int CheckClipboardRestoredAfterStepBackOriginalSlideNo = 38;
+        private const int CheckClipboardRestoredAfterStepBackActionSlideNo = 39;
+        private const int CheckClipboardRestoredAfterStepBackExpectedSlideNo = 41;
 
-        private const int CheckClipboardRestoredAfterStepBackBackgroundOriginalSlideNo = 40;
-        private const int CheckClipboardRestoredAfterStepBackBackgroundActionSlideNo = 41;
-        private const int CheckClipboardRestoredAfterStepBackBackgroundExpectedSlideNo = 43;
+        private const int CheckClipboardRestoredAfterStepBackBackgroundOriginalSlideNo = 41;
+        private const int CheckClipboardRestoredAfterStepBackBackgroundActionSlideNo = 42;
+        private const int CheckClipboardRestoredAfterStepBackBackgroundExpectedSlideNo = 44;
 
         private const string ShapeToCopy = "pictocopy";
         private const string ShapeToDelete = "text 3";
