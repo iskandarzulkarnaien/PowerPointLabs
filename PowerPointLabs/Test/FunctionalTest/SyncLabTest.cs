@@ -36,8 +36,8 @@ namespace Test.FunctionalTest
         
         private const int CustomPerspectiveShadowSlideNo = 48;
 
-        private const int CheckClipboardRestoredOriginalSlideNo = 50;
-        private const int CheckClipboardRestoredExpectedSlideNo = 51;
+        private const int CheckClipboardRestoredAfterCopyOriginalSlideNo = 50;
+        private const int CheckClipboardRestoredAfterCopyExpectedSlideNo = 51;
 
 
         private const string Line = "Straight Connector 2";
@@ -87,10 +87,10 @@ namespace Test.FunctionalTest
         {
             CheckIfClipboardIsRestored(() =>
             {
-                PpOperations.SelectSlide(CheckClipboardRestoredOriginalSlideNo);
+                PpOperations.SelectSlide(CheckClipboardRestoredAfterCopyOriginalSlideNo);
                 PpOperations.SelectShape(SyncCopyShape);
                 CopyStyle(syncLab, 1, 0);
-            }, CheckClipboardRestoredOriginalSlideNo, NormalCopyShape, CheckClipboardRestoredExpectedSlideNo, ExpectedCopyOutputText, PastedShape);
+            }, CheckClipboardRestoredAfterCopyOriginalSlideNo, NormalCopyShape, CheckClipboardRestoredAfterCopyExpectedSlideNo, ExpectedCopyOutputText, PastedShape);
         }
 
         private void TestCopySupportedPlaceHolders(ISyncLabController syncLab)
