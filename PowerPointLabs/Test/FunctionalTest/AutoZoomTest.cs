@@ -7,30 +7,30 @@ namespace Test.FunctionalTest
     [TestClass]
     public class AutoZoomTest : BaseFunctionalTest
     {
-        private const int DrillDownActualSourceSlideNo = 4;
+        private const int DrillDownActualStartSlideNo = 4;
         private const int DrillDownActualTransitionSlideNo = 5;
-        private const int DrillDownActualDestinationSlideNo = 6;
+        private const int DrillDownActualEndSlideNo = 6;
         private const int DrillDownExpectedSlideNo = 7;
         private const int DrillDownExpectedTransitionSlideNo = 8;
-        private const int DrillDownExpectedDestinationSlideNo = 9;
+        private const int DrillDownExpectedEndSlideNo = 9;
 
-        private const int DrillDownBackgroundActualSourceSlideNo = 10;
+        private const int DrillDownBackgroundActualStartSlideNo = 10;
         private const int DrillDownBackgroundActualTransitionSlideNo = 11;
-        private const int DrillDownBackgroundActualDestinationSlideNo = 12;
+        private const int DrillDownBackgroundActualEndSlideNo = 12;
         private const int DrillDownBackgroundExpectedSlideNo = 13;
         private const int DrillDownBackgroundExpectedTransitionSlideNo = 14;
-        private const int DrillDownBackgroundExpectedDestinationSlideNo = 15;
+        private const int DrillDownBackgroundExpectedEndSlideNo = 15;
 
-        private const int StepBackActualSourceSlideNo = 16;
+        private const int StepBackActualStartSlideNo = 16;
         private const int StepBackActualTransitionSlideNo = 17;
-        private const int StepBackActualDestinationSlideNo = 18;
+        private const int StepBackActualEndSlideNo = 18;
         private const int StepBackExpectedSlideNo = 20;
         private const int StepBackExpectedTransitionSlideNo = 21;
-        private const int StepBackExpectedDestinationSlideNo = 22;
+        private const int StepBackExpectedEndSlideNo = 22;
 
-        private const int StepBackBackgroundActualSourceSlideNo = 23;
+        private const int StepBackBackgroundActualStartSlideNo = 23;
         private const int StepBackBackgroundActualTransitionSlideNo = 24;
-        private const int StepBackBackgroundActualDestinationSlideNo = 25;
+        private const int StepBackBackgroundActualEndSlideNo = 25;
         private const int StepBackBackgroundExpectedSlideNo = 27;
         private const int StepBackBackgroundExpectedTransitionSlideNo = 28;
         private const int StepBackBackgroundExpectedDestinationSlideNo = 29;
@@ -57,52 +57,52 @@ namespace Test.FunctionalTest
         {
             PplFeatures.SetZoomProperties(true, true);
 
-            PpOperations.SelectSlide(4);
+            PpOperations.SelectSlide(DrillDownActualStartSlideNo);
             PpOperations.SelectShape("Drill Down This Shape");
             PplFeatures.DrillDown();
 
-            AssertIsSame(DrillDownActualSourceSlideNo, DrillDownExpectedSlideNo);
+            AssertIsSame(DrillDownActualStartSlideNo, DrillDownExpectedSlideNo);
             AssertIsSame(DrillDownActualTransitionSlideNo, DrillDownExpectedTransitionSlideNo);
-            AssertIsSame(DrillDownActualDestinationSlideNo, DrillDownExpectedDestinationSlideNo);
+            AssertIsSame(DrillDownActualEndSlideNo, DrillDownExpectedEndSlideNo);
         }
 
         private void TestDrillDownBackground()
         {
             PplFeatures.SetZoomProperties(false, true);
 
-            PpOperations.SelectSlide(10);
+            PpOperations.SelectSlide(DrillDownBackgroundActualStartSlideNo);
             PpOperations.SelectShape("Drill Down This Shape");
             PplFeatures.DrillDown();
 
-            AssertIsSame(DrillDownBackgroundActualSourceSlideNo, DrillDownBackgroundExpectedSlideNo);
+            AssertIsSame(DrillDownBackgroundActualStartSlideNo, DrillDownBackgroundExpectedSlideNo);
             AssertIsSame(DrillDownBackgroundActualTransitionSlideNo, DrillDownBackgroundExpectedTransitionSlideNo);
-            AssertIsSame(DrillDownBackgroundActualDestinationSlideNo, DrillDownBackgroundExpectedDestinationSlideNo);
+            AssertIsSame(DrillDownBackgroundActualEndSlideNo, DrillDownBackgroundExpectedEndSlideNo);
         }
 
         private void TestStepBack()
         {
             PplFeatures.SetZoomProperties(true, true);
 
-            PpOperations.SelectSlide(17);
+            PpOperations.SelectSlide(StepBackActualStartSlideNo);
             PpOperations.SelectShape("Step Back This Shape");
             PplFeatures.StepBack();
 
-            AssertIsSame(StepBackActualSourceSlideNo, StepBackExpectedSlideNo);
+            AssertIsSame(StepBackActualStartSlideNo, StepBackExpectedSlideNo);
             AssertIsSame(StepBackActualTransitionSlideNo, StepBackExpectedTransitionSlideNo);
-            AssertIsSame(StepBackActualDestinationSlideNo, StepBackExpectedDestinationSlideNo);
+            AssertIsSame(StepBackActualEndSlideNo, StepBackExpectedEndSlideNo);
         }
 
         private void TestStepBackBackground()
         {
             PplFeatures.SetZoomProperties(false, true);
 
-            PpOperations.SelectSlide(24);
+            PpOperations.SelectSlide(StepBackBackgroundActualStartSlideNo);
             PpOperations.SelectShape("Step Back This Shape");
             PplFeatures.StepBack();
 
-            AssertIsSame(StepBackBackgroundActualSourceSlideNo, StepBackBackgroundExpectedSlideNo);
+            AssertIsSame(StepBackBackgroundActualStartSlideNo, StepBackBackgroundExpectedSlideNo);
             AssertIsSame(StepBackBackgroundActualTransitionSlideNo, StepBackBackgroundExpectedTransitionSlideNo);
-            AssertIsSame(StepBackBackgroundActualDestinationSlideNo, StepBackBackgroundExpectedDestinationSlideNo);
+            AssertIsSame(StepBackBackgroundActualEndSlideNo, StepBackBackgroundExpectedEndSlideNo);
         }
 
         private void TestDrillDownUnsuccessful()
