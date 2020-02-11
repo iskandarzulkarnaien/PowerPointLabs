@@ -31,7 +31,31 @@ namespace Test.FunctionalTest
         private const int StepBackBackgroundActualEndSlideNo = 24;
         private const int StepBackBackgroundExpectedSlideNo = 27;
         private const int StepBackBackgroundExpectedTransitionSlideNo = 28;
-        private const int StepBackBackgroundExpectedDestinationSlideNo = 29;
+        private const int StepBackBackgroundExpectedEndSlideNo = 29;
+
+        private const int ErrorTestingSlideNo = 34;
+        private const int FirstSlideSlideNo = 1;
+        private const int LastSlideSlideNo = 51;
+
+        private const int CheckClipboardRestoredAfterDrillDownOriginalSlideNo = 31;
+        private const int CheckClipboardRestoredAfterDrillDownActionSlideNo = 32;
+        private const int CheckClipboardRestoredAfterDrillDownExpectedSlideNo = 34;
+
+        private const int CheckClipboardRestoredAfterDrillDownBackgroundOriginalSlideNo = 34;
+        private const int CheckClipboardRestoredAfterDrillDownBackgroundActionSlideNo = 35;
+        private const int CheckClipboardRestoredAfterDrillDownBackgroundExpectedSlideNo = 37;
+
+        private const int CheckClipboardRestoredAfterStepBackOriginalSlideNo = 37;
+        private const int CheckClipboardRestoredAfterStepBackActionSlideNo = 38;
+        private const int CheckClipboardRestoredAfterStepBackExpectedSlideNo = 40;
+
+        private const int CheckClipboardRestoredAfterStepBackBackgroundOriginalSlideNo = 40;
+        private const int CheckClipboardRestoredAfterStepBackBackgroundActionSlideNo = 41;
+        private const int CheckClipboardRestoredAfterStepBackBackgroundExpectedSlideNo = 43;
+
+        private const string ShapeToCopy = "pictocopy";
+        private const string ShapeToDelete = "text 3";
+        private const string ExpCopiedShape = "copied";
 
         protected override string GetTestingSlideName()
         {
@@ -43,6 +67,12 @@ namespace Test.FunctionalTest
         public void FT_AutoZoomTest()
         {
             // Do tests in reverse order because added slides change slide numbers lower down.
+            // New tests should be added before older tests to prevent having to change slide no constants.
+            // New slides should also be added after older slides.
+            TestClipboardRestoredAfterStepBackBackground();
+            TestClipboardRestoredAfterStepBack();
+            TestClipboardRestoredAfterDrillDownBackground();
+            TestClipboardRestoredAfterDrillDown();
             TestStepBackBackground();
             TestStepBack();
             TestDrillDownBackground();
@@ -113,8 +143,8 @@ namespace Test.FunctionalTest
 
         private void TestDrillDownUnsuccessful()
         {
-            Microsoft.Office.Interop.PowerPoint.Slide slide = PpOperations.SelectSlide(34);
-            slide.MoveTo(35);
+            Microsoft.Office.Interop.PowerPoint.Slide slide = PpOperations.SelectSlide(ErrorTestingSlideNo);
+            slide.MoveTo(LastSlideSlideNo);
             PpOperations.SelectShape("Zoom This Shape");
             MessageBoxUtil.ExpectMessageBoxWillPopUp(
                 "Unable to Add Animations",
@@ -124,13 +154,90 @@ namespace Test.FunctionalTest
 
         private void TestStepBackUnsuccessful()
         {
-            Microsoft.Office.Interop.PowerPoint.Slide slide = PpOperations.SelectSlide(35);
-            slide.MoveTo(1);
+            Microsoft.Office.Interop.PowerPoint.Slide slide = PpOperations.SelectSlide(LastSlideSlideNo);
+            slide.MoveTo(FirstSlideSlideNo);
             PpOperations.SelectShape("Zoom This Shape");
             MessageBoxUtil.ExpectMessageBoxWillPopUp(
                 "Unable to Add Animations",
                 "No previous slide is found. Please select the correct slide.",
                 PplFeatures.StepBack);
+        }
+
+        private void TestClipboardRestoredAfterDrillDown()
+        {
+            try
+            {
+                CheckIfClipboardIsRestored(() =>
+                {
+                    PplFeatures.SetZoomProperties(true, true);
+
+                    PpOperations.SelectSlide(CheckClipboardRestoredAfterDrillDownActionSlideNo);
+                    PpOperations.SelectShape("Drill Down This Shape");
+                    PplFeatures.DrillDown();
+                }, CheckClipboardRestoredAfterDrillDownOriginalSlideNo, ShapeToCopy, CheckClipboardRestoredAfterDrillDownExpectedSlideNo, ShapeToDelete, ExpCopiedShape);
+            }
+            catch (System.Runtime.InteropServices.COMException e)
+            {
+                // Failed clipboard restore after drill down will usually result in copying multiple shapes
+                if (e.Message.Equals("ShapeRange (unknown member) : Invalid request.  Command cannot be applied to a shape range with multiple shapes."))
+                {
+                    Assert.Fail("Failed to restore clipboard after DrillDown");
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        private void TestClipboardRestoredAfterDrillDownBackground()
+        {
+            try {
+                CheckIfClipboardIsRestored(() =>
+                {
+                    PplFeatures.SetZoomProperties(false, true);
+
+                    PpOperations.SelectSlide(CheckClipboardRestoredAfterDrillDownBackgroundActionSlideNo);
+                    PpOperations.SelectShape("Drill Down This Shape");
+                    PplFeatures.DrillDown();
+                }, CheckClipboardRestoredAfterDrillDownBackgroundOriginalSlideNo, ShapeToCopy, CheckClipboardRestoredAfterDrillDownBackgroundExpectedSlideNo, ShapeToDelete, ExpCopiedShape);
+            }
+            catch (System.Runtime.InteropServices.COMException e)
+            {
+                // Failed clipboard restore after drill down will usually result in copying multiple shapes
+                if (e.Message.Equals("ShapeRange (unknown member) : Invalid request.  Command cannot be applied to a shape range with multiple shapes."))
+                {
+                    Assert.Fail("Failed to restore clipboard after DrillDownBackground");
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        private void TestClipboardRestoredAfterStepBack()
+        {
+            CheckIfClipboardIsRestored(() =>
+            {
+                PplFeatures.SetZoomProperties(true, true);
+
+                PpOperations.SelectSlide(CheckClipboardRestoredAfterStepBackActionSlideNo);
+                PpOperations.SelectShape("Step Back This Shape");
+                PplFeatures.StepBack();
+            }, CheckClipboardRestoredAfterStepBackOriginalSlideNo, ShapeToCopy, CheckClipboardRestoredAfterStepBackExpectedSlideNo, ShapeToDelete, ExpCopiedShape);
+        }
+
+        private void TestClipboardRestoredAfterStepBackBackground()
+        {
+            CheckIfClipboardIsRestored(() =>
+            {
+                PplFeatures.SetZoomProperties(false, true);
+
+                PpOperations.SelectSlide(CheckClipboardRestoredAfterStepBackBackgroundActionSlideNo);
+                PpOperations.SelectShape("Step Back This Shape");
+                PplFeatures.StepBack();
+            }, CheckClipboardRestoredAfterStepBackBackgroundOriginalSlideNo, ShapeToCopy, CheckClipboardRestoredAfterStepBackBackgroundExpectedSlideNo, ShapeToDelete, ExpCopiedShape);
         }
 
 
