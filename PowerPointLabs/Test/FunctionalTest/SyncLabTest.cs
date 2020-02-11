@@ -36,6 +36,10 @@ namespace Test.FunctionalTest
         
         private const int CustomPerspectiveShadowSlideNo = 48;
 
+        private const int CheckClipboardRestoredOriginalSlideNo = 50;
+        private const int CheckClipboardRestoredExpectedSlideNo = 51;
+
+
         private const string Line = "Straight Connector 2";
         private const string RotatedArrow = "Right Arrow 5";
         private const string Group = "Group 1";
@@ -54,6 +58,10 @@ namespace Test.FunctionalTest
         private const string Chart = "Content Placeholder 5";
         private const string Picture = "Content Placeholder 4";
         private const string SmartArt = "SmartArt 1";
+        private const string SyncCopyShape = "Sync Copy Shape";
+        private const string NormalCopyShape = "Normal Copy Shape";
+        private const string PastedShape = "Pasted Shape";
+        private const string ExpectedCopyOutputText = "Text";
 
         protected override string GetTestingSlideName()
         {
@@ -72,6 +80,17 @@ namespace Test.FunctionalTest
             TestCopySupportedPlaceHolders(syncLab);
             TestCopyUnsupportedPlaceHolders(syncLab);
             TestCopyCustomPerspectiveShadow(syncLab);
+            TestClipboardRestoredAfterCopy(syncLab);
+        }
+
+        private void TestClipboardRestoredAfterCopy(ISyncLabController syncLab)
+        {
+            CheckIfClipboardIsRestored(() =>
+            {
+                PpOperations.SelectSlide(CheckClipboardRestoredOriginalSlideNo);
+                PpOperations.SelectShape(SyncCopyShape);
+                CopyStyle(syncLab, 1, 0);
+            }, CheckClipboardRestoredOriginalSlideNo, NormalCopyShape, CheckClipboardRestoredExpectedSlideNo, ExpectedCopyOutputText, PastedShape);
         }
 
         private void TestCopySupportedPlaceHolders(ISyncLabController syncLab)
