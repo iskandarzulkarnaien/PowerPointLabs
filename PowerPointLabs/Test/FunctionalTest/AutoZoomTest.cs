@@ -22,15 +22,13 @@ namespace Test.FunctionalTest
         private const int DrillDownBackgroundExpectedEndSlideNo = 15;
 
         private const int StepBackActualStartSlideNo = 16;
-        private const int StepBackActualTransitionSlideNo = 17;
-        private const int StepBackActualEndSlideNo = 18;
+        private const int StepBackActualEndSlideNo = 17;
         private const int StepBackExpectedSlideNo = 20;
         private const int StepBackExpectedTransitionSlideNo = 21;
         private const int StepBackExpectedEndSlideNo = 22;
 
         private const int StepBackBackgroundActualStartSlideNo = 23;
-        private const int StepBackBackgroundActualTransitionSlideNo = 24;
-        private const int StepBackBackgroundActualEndSlideNo = 25;
+        private const int StepBackBackgroundActualEndSlideNo = 24;
         private const int StepBackBackgroundExpectedSlideNo = 27;
         private const int StepBackBackgroundExpectedTransitionSlideNo = 28;
         private const int StepBackBackgroundExpectedDestinationSlideNo = 29;
@@ -83,26 +81,34 @@ namespace Test.FunctionalTest
         {
             PplFeatures.SetZoomProperties(true, true);
 
-            PpOperations.SelectSlide(StepBackActualStartSlideNo);
+            // StepBack 'starts' from the end slide
+            PpOperations.SelectSlide(StepBackActualEndSlideNo);
             PpOperations.SelectShape("Step Back This Shape");
             PplFeatures.StepBack();
 
+            // StepBack creates a slide behind the end slide, causing the end slide's index to be incremented by 1
+            const int StepBackActualTransitionSlideNo = StepBackActualEndSlideNo;
+
             AssertIsSame(StepBackActualStartSlideNo, StepBackExpectedSlideNo);
             AssertIsSame(StepBackActualTransitionSlideNo, StepBackExpectedTransitionSlideNo);
-            AssertIsSame(StepBackActualEndSlideNo, StepBackExpectedEndSlideNo);
+            AssertIsSame(StepBackActualEndSlideNo + 1, StepBackExpectedEndSlideNo);
         }
 
         private void TestStepBackBackground()
         {
             PplFeatures.SetZoomProperties(false, true);
 
-            PpOperations.SelectSlide(StepBackBackgroundActualStartSlideNo);
+            // StepBack 'starts' from the end slide
+            PpOperations.SelectSlide(StepBackBackgroundActualEndSlideNo);
             PpOperations.SelectShape("Step Back This Shape");
             PplFeatures.StepBack();
 
+            // StepBack creates a slide behind the end slide, causing the end slide's index to be incremented by 1
+            const int StepBackBackgroundActualTransitionSlideNo = StepBackBackgroundActualEndSlideNo;
+
             AssertIsSame(StepBackBackgroundActualStartSlideNo, StepBackBackgroundExpectedSlideNo);
             AssertIsSame(StepBackBackgroundActualTransitionSlideNo, StepBackBackgroundExpectedTransitionSlideNo);
-            AssertIsSame(StepBackBackgroundActualEndSlideNo, StepBackBackgroundExpectedEndSlideNo);
+            AssertIsSame(StepBackBackgroundActualEndSlideNo + 1, StepBackBackgroundExpectedEndSlideNo);
         }
 
         private void TestDrillDownUnsuccessful()
