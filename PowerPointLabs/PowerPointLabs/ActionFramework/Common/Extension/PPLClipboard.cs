@@ -15,7 +15,8 @@ namespace PowerPointLabs.ActionFramework.Common.Extension
         private IDataObject lDataObject;
         private IntPtr _parentWindow;
         public bool AutoDismiss;
-        private const string DEFAULT_CLIPBOARD = ""; // Empty string chosen as it is not noticable to users
+        // Single-space string chosen as it is not noticable to users. The empty string can not be used as it is not a paste-able object
+        private const string DEFAULT_CLIPBOARD = " ";
 
         private PPLClipboard(IntPtr parentWindow, bool autoDismiss)
         {
@@ -72,10 +73,9 @@ namespace PowerPointLabs.ActionFramework.Common.Extension
 
         public void LockAndRelease(Action action)
         {
-            // Empty clipboard causes unexpected behaviour
             if (IsEmpty())
             {
-                Clipboard.SetText(DEFAULT_CLIPBOARD);
+                PopulateClipboard();
             }
 
             LockAndRelease<object>(() =>
@@ -107,23 +107,19 @@ namespace PowerPointLabs.ActionFramework.Common.Extension
             if (Instance == null)
             {
                 Instance = new PPLClipboard(parentWindow, autoDismiss);
-
-                // Empty clipboard causes unexpected behaviour in many features
-                //if (Instance.IsEmpty())
-                //{
-                //    Clipboard.SetText("TEST STRING");
-                //}
             }
-            //else
-            //{
-            //    throw new Exception("PPLClipboard Exists on startup!"); // For testing.
-            //}
         }
 
         public void Teardown()
         {
             ReleaseClipboard();
             Instance = null;
+        }
+
+        private void PopulateClipboard()
+        {
+            Clipboard.SetText(DEFAULT_CLIPBOARD);
+            Clipboard.Flush();
         }
 
         private void LockClipboard()
