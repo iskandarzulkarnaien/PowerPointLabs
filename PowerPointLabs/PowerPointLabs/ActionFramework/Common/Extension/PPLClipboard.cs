@@ -15,6 +15,7 @@ namespace PowerPointLabs.ActionFramework.Common.Extension
         private IDataObject lDataObject;
         private IntPtr _parentWindow;
         public bool AutoDismiss;
+        private const string DEFAULT_CLIPBOARD = ""; // Empty string chosen as it is not noticable to users
 
         private PPLClipboard(IntPtr parentWindow, bool autoDismiss)
         {
@@ -71,6 +72,12 @@ namespace PowerPointLabs.ActionFramework.Common.Extension
 
         public void LockAndRelease(Action action)
         {
+            // Empty clipboard causes unexpected behaviour
+            if (IsEmpty())
+            {
+                Clipboard.SetText(DEFAULT_CLIPBOARD);
+            }
+
             LockAndRelease<object>(() =>
             {
                 action();
@@ -95,7 +102,31 @@ namespace PowerPointLabs.ActionFramework.Common.Extension
             }
         }
 
-        public void LockClipboard()
+        public static void Init(IntPtr parentWindow, bool autoDismiss = false)
+        {
+            if (Instance == null)
+            {
+                Instance = new PPLClipboard(parentWindow, autoDismiss);
+
+                // Empty clipboard causes unexpected behaviour in many features
+                //if (Instance.IsEmpty())
+                //{
+                //    Clipboard.SetText("TEST STRING");
+                //}
+            }
+            //else
+            //{
+            //    throw new Exception("PPLClipboard Exists on startup!"); // For testing.
+            //}
+        }
+
+        public void Teardown()
+        {
+            ReleaseClipboard();
+            Instance = null;
+        }
+
+        private void LockClipboard()
         {
             if (IsLocked)
             {
@@ -112,36 +143,22 @@ namespace PowerPointLabs.ActionFramework.Common.Extension
             IsLocked = true;
         }
 
-        public void ReleaseClipboard()
+        private void ReleaseClipboard()
         {
             if (!IsLocked) { return; }
             CloseClipboard();
             IsLocked = false;
         }
 
-        public static void Init(IntPtr parentWindow, bool autoDismiss = false)
-        {
-            if (Instance == null)
-            {
-                Instance = new PPLClipboard(parentWindow, autoDismiss);
-            }
-        }
-
-        public void Teardown()
-        {
-            ReleaseClipboard();
-            Instance = null;
-        }
-
         // not working stably
-        public void SaveClipboard()
+        private void SaveClipboard()
         {
             lDataObject = Clipboard.GetDataObject();
         }
 
         // referred to https://stackoverflow.com/questions/6262454/c-sharp-backing-up-and-restoring-clipboard
         // not working stably
-        public void RestoreClipboard()
+        private void RestoreClipboard()
         {
             if (lDataObject != null)
             {
